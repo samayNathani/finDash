@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="maps.css" media="screen"/>
+    <title>Place Searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var map;
+      var service;
+      var infowindow;
+
+      function initMap() {
+        var pyrmont = new google.maps.LatLng(35.282619,-120.660011);
+
+        infowindow = new google.maps.InfoWindow();
+
+        map = new google.maps.Map(
+            document.getElementById('map'), {center: pyrmont, zoom: 15});
+
+        var request = {
+            location: pyrmont,
+            radius: '500',
+            type: ['atm']
+        };
+
+        service = new google.maps.places.PlacesService(map);
+
+        service.nearbySearch(request, callback);
+      }
+    
+
+      var to_print = new Array(10);
+      function callback(results, status) { //results holds all of the information
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+            console.log(results[i].name);
+            console.log(results[i].opening_hou);
+            console.log(results[i]);
+            }
+        }
+      }
+      
+      function createMarker(place) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+
+          //document.getelementbyid()
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcXUPUaY3YDvTER2uq6Rd6HLLZ7zgjtfA&libraries=places&callback=initMap" async defer></script>
+    <!-- <div id="info"> 
+        This is for the bank icons.
+
+        <p id = "GFG_DOWN" style 
+               = "color:green; font-size: 20px; font-weight: bold;"> 
+        </p> 
+          
+        <script> 
+            // console.log(results[0]); //mozilla document
+            // var el_down = document.getElementById("GFG_DOWN"); //document.getelementbyid()
+              
+            // var printObj = function(obj) { 
+            //     var string = ''; 
+  
+            //     for(var prop in obj) { 
+            //         if(typeof obj[prop] == 'string') { 
+            //             string+= prop + ': ' + obj[prop]+'; </br>'; 
+            //         } 
+            //         else { 
+            //             string+= prop + ': { </br>' + print(obj[prop]) + '}'; 
+            //         } 
+            //     } 
+  
+            //     return string; 
+            // } 
+            // function gfg_Run() {  
+            //     el_down.innerHTML = printObj(results); 
+            // } 
+            console.log(to_print[0]);
+            document.open();
+            document.write('<h1>' + to_print[0] + '</h1>');
+            document.close();
+        </script>
+    </div> -->
+  </body>
+</html>
