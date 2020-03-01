@@ -13,22 +13,46 @@
     <div class="grid">
       <div class="grid__column grid__column--is-twelve-columns">
         <div id="banner" class="everpresent-content">
-          <h1 class="everpresent-content__heading">FinDash Plaid API Implementation</h1>
+          <h1 class="everpresent-content__heading">Findash Finanace Suite</h1>
+
+          <button id="link-btn" class="button button--is-primary" disabled>Log In</button>
+
           <p id="intro" class="everpresent-content__subheading">
-            Get Bank data, Balances, and transaction history
+            View Bank data, Balances, and <br> transaction history all in one place
           </p>
+          <div class="loading-indicator"></div>
           <p id="steps" class="everpresent-content__subheading">
-           Account linked successfully
           </p>
         </div>
 
         <div id="container" class="initial-view">
-          <p class="initial-view__description">
-            Click the button to begin the application
-          </p>
 
-          <button id="link-btn" class="button button--is-primary" disabled>Log In</button>
-          <div class="loading-indicator"></div>
+          <div class="row">
+            <div class="column">
+              <table>
+                <tr>
+                <td><table>
+                  <tr>
+                    <td><div id="rcorners1" href="https://www.wellsfargo.com/"></div>
+                    <div id="rcorners2" href="https://www.bankofamerica.com/"></div></td>
+                  </tr>
+                  <tr>           
+                    <td><div id="rcorners3" href="https://www.chase.com/"></div>
+                    <div id="rcorners4" href="https://online.citi.com/US/login.do?locale=en_US"></div></td>
+                  </tr>
+                </table></td>
+              </tr>
+              </table>
+            </div>
+            <div class="column">
+              <div class="item-data-row__response">
+                <table><tbody id="get-item-data"></tbody></table>
+              </div>
+              <div class="item-data-row__response" style="display: inline;">
+              <table><tbody id="get-balance-data"></tbody></table>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="app" class="connected-view">
@@ -46,19 +70,10 @@
             <div style="clear: both"></div>
           </div>
 
-          <p>View Your Data on this page</p>
-
           <div id="please-work">
 
             <div class="item-data-row__right">
-              <button id="sis-pls" class="button button--is-small button--is-default button--is-full-width">Click Tile</button>
-            </div>
-
-            <div class="item-data-row__response">
-              <table><tbody id="get-item-data"></tbody></table>
-            </div>
-            <div class="item-data-row__response">
-              <table><tbody id="get-balance-data"></tbody></table>
+              <button id="sis-pls" class="button button--is-large button--is-default button--is-full-width ">View Account</button>
             </div>
             <div class="item-data-row__response">
               <table><tbody id="get-transactions-data"></tbody></table>
@@ -77,10 +92,10 @@
   (function($) {
     // Handles redirect from the oauth response page for the oauth flow.
     if (document.referrer != null && document.referrer.includes('http://localhost:8000/oauth-response.html')) {
-      $('#container').fadeOut('slow', function() {
+      $('#container').fadeOut('fast', function() {
         //$('#item_id').text('<%= ITEM_ID %>');
         //$('#access_token').text('<%= ACCESS_TOKEN %>');
-        $('#intro').hide();
+        //$('#intro').hide();
         $('#app, #steps').fadeIn('slow');
       });
     }
@@ -127,12 +142,12 @@
             $.post('/get_access_token', {
               public_token: public_token
             }, function(data) {
-              $('#container').fadeOut('slow', function() {
+              //$('#container').fadeOut('slow', function() {
                 //$('#item_id').text(data.item_id);
                 //$('#access_token').text(data.access_token);
-                $('#intro').hide();
+                //$('#intro').hide();
                 $('#app, #steps').fadeIn('slow');
-              });
+              ;
             });
           },
         });
@@ -147,13 +162,13 @@
           $.post('/get_access_token', {
             public_token: public_token
           }, function(data) {
-            $('#container').fadeOut('slow', function() {
+            //$('#container').fadeOut('slow', function() {
               //$('#item_id').text(data.item_id);
               //$('#access_token').text(data.access_token);
-              $('#intro').hide();
+              //$('#intro').hide();
               $('#app, #steps').fadeIn('slow');
               
-            });
+            ;
           });
         },
       });
@@ -166,12 +181,12 @@
       $.post('/set_access_token', {
         access_token: accessToken
       }, function(data) {
-        $('#container').fadeOut('slow', function() {
+        //$('#container').fadeOut('slow', function() {
           //$('#item_id').text(data.item_id);
           //$('#access_token').text(accessToken);
-          $('#intro').hide();
+          //$('#intro').hide();
           $('#app, #steps').fadeIn('slow');
-        });
+        ;
       });
     }
 
@@ -186,7 +201,7 @@
             displayError(this, data.error);
           } else {
             var html = '';
-            html += '<tr><td><strong>Institution name</strong></td><td><strong>' + data.institution.name + '</strong></td></tr>';
+            html += '<tr><td><strong>Bank</strong></td><td><strong>' + data.institution.name + '</strong></td></tr>';
             $(this).html(html).slideDown();
           }
         });
@@ -198,13 +213,12 @@
             return;
           }
           var balanceData = data.balance;
-          var html = '<tr><td><strong>Name</strong></td><td><strong>Balance</strong></td><td><strong>Subtype</strong></td><td><strong>Mask</strong></td></tr>';
+          var html = '<tr><td><strong>Name</strong></td><td><strong>Balance</strong></td><td><strong>Subtype</strong></td></tr>';
           balanceData.accounts.forEach(function(account, idx) {
             html += '<tr>';
             html += '<td>' + account.name + '</td>';
             html += '<td>$' + (account.balances.available != null ? account.balances.available : account.balances.current) + '</td>'
             html += '<td>' + account.subtype + '</td>';
-            html += '<td>' + account.mask + '</td>';
             html += '</tr>';
           });
 
@@ -575,3 +589,5 @@ function displayError(element, error) {
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
